@@ -8,3 +8,11 @@
 <div ng-controller="RefereeItemController">
   {{ referee.name }}
 </div>
+<div ng-controller="RefereeFormController">
+  <form name="form" class="css-form" novalidate>
+    Name:
+    <input type="text" ng-model="referee.name" name="name" required />
+    <input type="button" ng-click="reset(form)"     value="Reset" />
+    <input type="submit" ng-click="update(referee)" value="Save" />
+  </form>
+</div>

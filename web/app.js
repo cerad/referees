@@ -1,27 +1,27 @@
 'use strict';
 
-var myApp = angular.module('myApp', ['ngResource','ngRoute']);
+(function() {
 
-myApp.controller('RefereeListController', ['$scope', 'RefereeResource',
-  function($scope, RefereeResource) {
-    $scope.referees = RefereeResource.query();
-    $scope.orderProp = 'age';
-  }
-]);
-myApp.controller('RefereeItemController', ['$scope', '$routeParams', 'RefereeResource',
-  function($scope, $routeParams, RefereeResource) {
-    $scope.referee = RefereeResource.get({ id: 42 });
-  }
-]);
+var zaysoApp = angular.module('zaysoApp', ['ngResource','ngRoute','zaysoApp.refereeComponent']);
 
-/* =============================================
- * This needs more research
- */
-myApp.factory('RefereeResource', ['$resource',
-  function($resource){
-    return $resource('app_dev.php/referees/:id', {}, {
-    //query: {method:'GET', isArray:true}
-    });
-}]);
-
-
+zaysoApp.config(['$routeProvider',
+  function($routeProvider) {
+    $routeProvider.
+      when('/referees', {
+        templateUrl: 'components/referee/referee-list.html',
+        controller: 'RefereeListController'
+      }).
+      when('/referees/:id/show', {
+        templateUrl: 'components/referee/referee-show.html',
+        controller: 'RefereeShowController'
+      }).
+      when('/referees/:id/edit', {
+        templateUrl: 'components/referee/referee-edit.html',
+        controller: 'RefereeEditController'
+      }).
+      otherwise({
+        redirectTo: '/referees'
+      });
+  }]);
+  
+})();

@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html ng-app="myApp" ng-strict-di>
+<html ng-app="zaysoApp" ng-strict-di>
 <head>
   <title>Refs</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="app.css">
 </head>
-<body ng-include="'app.html'">
+<body>
+<div ng-view></div>
 <script src="/bower_components/angular/angular.js"></script>
 <script src="/bower_components/angular-route/angular-route.js"></script>
 <script src="/bower_components/angular-resource/angular-resource.js"></script>
-<script src="app.js"></script>
+<script src="/app.js"></script>
+<script src="/components/referee/referee.js"></script>
 </body></html>

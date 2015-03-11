@@ -1,0 +1,9 @@
+<div ng-controller="RefereeListController">
+  <ul class="referees">
+    <li ng-repeat="referee in referees">
+      {{ referee.id }} {{ referee.name }}
+      <a href="#/referees/{{referee.id}}/show">Show</a>
+      <a href="#/referees/{{referee.id}}/edit">Edit</a>
+    </li>
+  </ul>
+</div>
