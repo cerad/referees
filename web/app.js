@@ -19,6 +19,10 @@ zaysoApp.config(['$routeProvider',
         templateUrl: 'components/referee/referee-edit.html',
         controller: 'RefereeEditController'
       }).
+      when('/referees/insert', {
+        templateUrl: 'components/referee/referee-insert.html',
+        controller: 'RefereeInsertController'
+      }).
       otherwise({
         redirectTo: '/referees'
       });

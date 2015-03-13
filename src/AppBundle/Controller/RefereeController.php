@@ -9,24 +9,29 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
+use Symfony\Component\DependencyInjection\ContainerInterface; 
+        
 class RefereeController extends Controller
 {
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+        $this->refereeRepository = $container->get('cerad__referee__repository');
+    }
     /**
-     * @Route("/referees/{id}", name="referee-put")
+     * @Route("/referees/{id}", name="referee-update")
      * @Method({"PUT"})
      */
-    public function putOneAction(Request $request, $id)
+    public function updateAction(Request $request, $id)
     {
-        $refereeRepository = new RefereeRepository();
-        
-        $referee = $refereeRepository->findOneById($id);
+        $referee = $this->refereeRepository->find($id);
         
         $content = json_decode($request->getContent(),true);
       //print_r($content); die();
         
         $referee['name'] = $content['name'];
         
-        $refereeRepository->save($referee);
+        $referee = $this->refereeRepository->update($referee);
         
         return new JsonResponse($referee);
     }
@@ -36,35 +41,31 @@ class RefereeController extends Controller
      */
     public function getOneAction($id)
     {
-        $refereeRepository = new RefereeRepository();
+        $referee = $this->refereeRepository->find($id);
         
-        return new JsonResponse($refereeRepository->findOneById($id));
+        return new JsonResponse($referee);
     }
     /**
      * @Route("/referees", name="referees")
      * @Method({"GET"})
      */
-    public function getAllAction($id = null)
+    public function getAllAction()
     {
-        $refereeRepository = new RefereeRepository();
+        $referees = $this->refereeRepository->findAll();
         
-        return new JsonResponse($refereeRepository->findAll());
+        return new JsonResponse($referees);
         
     }
     /**
-     * @Route("/referees", name="referees-post")
+     * @Route("/referees", name="referees-insert")
      * @Method({"POST"})
      */
-    public function postOneAction(Request $request)
+    public function insertAction(Request $request)
     {
-        $referee = json_decode($request->getContent(),true);
-        print_r($referee); die();
-        $referee['id'] = 4;
+        $referee1 = json_decode($request->getContent(),true);
         
-        $refereeRepository = new RefereeRepository();
-        $refereeRepository->save($referee);
+        $referee2 = $this->refereeRepository->insert($referee1);
         
-        return new JsonResponse($referee);
-        
+        return new JsonResponse($referee2);
     }
 }

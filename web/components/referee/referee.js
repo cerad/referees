@@ -4,14 +4,26 @@
 var refereeComponent = angular.module('zaysoApp.refereeComponent', []);
 
 refereeComponent.controller('RefereeListController', ['$scope', 'RefereeResource',
-  function($scope, RefereeResource) {
-    $scope.referees = RefereeResource.query();
-    $scope.orderProp = 'age';
+  function($scope, RefereeResource) 
+  {
+  //$scope.referees = [];
+    
+    RefereeResource.query(function(response)
+    {
+        $scope.referees = response;
+    });
   }
 ]);
 refereeComponent.controller('RefereeShowController', ['$scope', '$routeParams', 'RefereeResource',
-  function($scope, $routeParams, RefereeResource) {
-    $scope.referee = RefereeResource.get({ id: $routeParams.id });
+  function($scope, $routeParams, RefereeResource) 
+  {
+    $scope.referee = RefereeResource.get({ id: $routeParams.id }, function(item)
+    {
+        $scope.referee = item;
+        console.log('Referee Show Success' + $scope.referee);
+    });
+    
+    console.log('Referee Show' + $scope.referee);
   }
 ]);
 refereeComponent.controller('RefereeEditController', ['$scope', '$routeParams', 'RefereeResource',
@@ -19,14 +31,19 @@ refereeComponent.controller('RefereeEditController', ['$scope', '$routeParams', 
   {
     $scope.referee = RefereeResource.get({ id: $routeParams.id });
     
-    $scope.reset = function() {
-      // $scope.item = angular.copy($scope.itemMaster);
-    };
-    
     $scope.edit = function() {
-    //$scope.itemMaster = angular.copy(item);
       console.log($scope.referee);
-      RefereeResource.update($scope.referee);
+      $scope.referee.$update;
+    };
+  }
+]);
+refereeComponent.controller('RefereeInsertController', ['$scope', '$routeParams', 'RefereeResource',
+  function($scope, $routeParams, RefereeResource) 
+  {
+    $scope.referee = new RefereeResource({ name: 'New Name'});
+    
+    $scope.insert = function() {
+      $scope.referee = $scope.referee.$save();  // Not quite right
     };
   }
 ]);
@@ -36,9 +53,15 @@ refereeComponent.controller('RefereeEditController', ['$scope', '$routeParams', 
  */
 refereeComponent.factory('RefereeResource', ['$resource',
   function($resource){
-    return $resource('app_dev.php/referees/:id', {id: '@id'}, {
+    var referee = 
+      $resource('app_dev.php/referees/:id', {
+        id:   '@id'
+      }, {
       update: {method: 'PUT'}
     });
+    referee.namex = 'New Referee Name';
+    
+    return referee;
 }]);
 
 })();
